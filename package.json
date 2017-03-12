@@ -1,7 +1,7 @@
 {
-  "name": "voting_app",
+  "name": "time_tracking_app",
   "version": "1.1.0",
-  "author": "Fullstack.io",
+  "author": "Hiep.vv",
   "scripts": {
     "go": "open http://localhost:3000; npm run server",
     "e2e": "nightwatch",

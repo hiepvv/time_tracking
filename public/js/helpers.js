@@ -1,10 +1,16 @@
-// import uuid from 'uuid.js';
+// import uuid from 'uuid';
+
+function includeJS() {
+   document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.7/uuid.js"></script>');
+}
+
+includeJS();
 
 function newTimer(attrs = {}) {
     return {
         title: attrs.title || 'Timer',
         project: attrs.project || 'Project',
-        id: 'beb028e6-0242-4ecf-8bd0-ca7a8722d512',// uuid.v4(), // eslint-disable-line no-undef
+        id: uuid.v4(), // eslint-disable-line no-undef
         elapsed: 0
     };
 }

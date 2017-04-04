@@ -1,23 +1,17 @@
 const TimersDashboard = React.createClass({
   getInitialState: function () {
     return {
-      timers: [
-        {
-          title: 'Practice squat',
-          project: 'Gym Chores',
-          id: uuid.v4(),
-          elapsed: 545099,
-          runningSince: null
-        },
-        {
-          title: 'Bake squash',
-          project: 'Kitchen Chores',
-          id: uuid.v4(),
-          elapsed: 1273998,
-          runningSince: null
-        }
-      ]
+      timers: []
     }
+  },
+  componentDidMount: function () {
+    this.loadTimersFromServer()
+    // setInterval(this.loadTimersFromServer)
+  },
+  loadTimersFromServer: function () {
+    client.getTimers().then(function (serverTimers) {
+      this.setState({ timers: serverTimers })
+    }.bind(this))
   },
   handleCreateFormSubmit: function (timer) {
     this.createTimer(timer)
@@ -25,7 +19,7 @@ const TimersDashboard = React.createClass({
   handleEditFormSubmit: function (attrs) {
     this.updateTimer(attrs)
   },
-  handleTrashClick: function(timerId) {
+  handleTrashClick: function (timerId) {
     this.deleteTimer(timerId)
   },
   handleStartClick: function (timerId) {
@@ -35,61 +29,39 @@ const TimersDashboard = React.createClass({
     this.stopTimer(timerId)
   },
   createTimer: function (timer) {
-    const t = newTimer(timer)
-    this.setState({
-      timers: this.state.timers.concat(t)
-    })
+    client.createTimer(timer).then(function (timers) {
+      this.setState({
+        timers: timers
+      })
+    }.bind(this))
   },
   updateTimer: function (attrs) {
-    this.setState({
-      timers: this.state.timers.map((timer) =>{
-        if (timer.id === attrs.id) {
-          return Object.assign({}, timer, {
-            title: attrs.title,
-            project: attrs.project
-          })
-        } else {
-          return timer
-        }
+    client.updateTimer(attrs).then(function (timers) {
+      this.setState({
+        timers: timers
       })
-    })
+    }.bind(this))
   },
-  deleteTimer: function(timerId) {
-    this.setState({
-      timers: this.state.timers.filter(t => t.id != timerId)
-    })
+  deleteTimer: function (timerId) {
+    client.deleteTimer(timerId).then(function (timers) {
+      this.setState({
+        timers: timers
+      })
+      }.bind(this))
   },
   startTimer: function (timerId) {
-    const now = Date.now()
-
-    this.setState({
-      timers: this.state.timers.map((timer) => {
-        if (timer.id === timerId) {
-          return Object.assign({}, timer, {
-            runningSince: now
-          })
-        } else {
-          return timer
-        }
+    client.startTimer(timerId).then(function (timers) {
+      this.setState({
+        timers: timers
       })
-    })
+    }.bind(this))
   },
   stopTimer: function (timerId) {
-    const now = Date.now()
-
-    this.setState({
-      timers: this.state.timers.map((timer) => {
-        if (timer.id === timerId) {
-          const lastElapsed = now - timer.runningSince
-          return Object.assign({}, timer, {
-            elapsed: timer.elapsed + lastElapsed,
-            runningSince: null
-          })
-        } else {
-          return timer
-        }
+    client.stopTimer(timerId).then(function (timers) {
+      this.setState({
+        timers: timers
       })
-    })
+    }.bind(this))
   },
   render: function () {
     return (
@@ -102,8 +74,8 @@ const TimersDashboard = React.createClass({
             onStartClick={this.handleStartClick}
             onStopClick={this.handleStopClick}
           />
-          <ToggleableTimerForm 
-            onFormSubmit={this.handleCreateFormSubmit}/>
+          <ToggleableTimerForm
+            onFormSubmit={this.handleCreateFormSubmit} />
         </div>
       </div>
     );
@@ -253,9 +225,9 @@ const ToggleableTimerForm = React.createClass({
   render: function () {
     if (this.state.isOpen) {
       return (
-        <TimerForm 
+        <TimerForm
           onFormSubmit={this.handleFormSubmit}
-          onFormClose={this.handleFormClose}/>
+          onFormClose={this.handleFormClose} />
       );
     } else {
       return (
@@ -324,7 +296,7 @@ const Timer = React.createClass({
 });
 
 const TimerActionButton = React.createClass({
-  render: function() {
+  render: function () {
     if (this.props.timerIsRunning) {
       return (
         <div className='ui bottom attached red basic button'

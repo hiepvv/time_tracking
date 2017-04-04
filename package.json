@@ -3,10 +3,10 @@
   "version": "1.1.0",
   "author": "Hiep.vv",
   "scripts": {
-    "go": "open http://localhost:3000; npm run server",
+    "go": "open http://localhost:3000; npm run start",
     "e2e": "nightwatch",
     "test": "./node_modules/.bin/concurrently -k 'npm run server' 'npm run e2e'",
-    "start": "npm run server",
+    "start": "nodemon bin/index.js",
     "server": "live-server public --host=localhost --port=3000 --middleware=./disable-browser-cache.js"
   },
   "private": true,
@@ -15,6 +15,10 @@
     "live-server": "git://github.com/acco/live-server.git"
   },
   "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "nodemon": "^1.11.0",
+    "path": "^0.12.7",
     "semantic-ui": "git://github.com/Semantic-Org/Semantic-UI.git#27d58a01793b66318478fbc5b6676804d22d065d"
   }
 }

@@ -1,24 +1,3 @@
-// import uuid from 'uuid';
-
-function includeJS() {
-   document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.7/uuid.js"></script>');
-}
-
-includeJS();
-
-function newTimer(attrs = {}) {
-    return {
-        title: attrs.title || 'Timer',
-        project: attrs.project || 'Project',
-        id: uuid.v4(), // eslint-disable-line no-undef
-        elapsed: 0
-    };
-}
-
-function findById(array, id, cb) {
-    cb(array.find(el => el.id === id));
-}
-
 function renderElapsedString(elapsed, runningSince) {
     let totalElapsed = elapsed;
     if (runningSince) {
@@ -45,10 +24,3 @@ function pad(numberString, size) {
     while (padded.length < size) padded = '0' + padded;
     return padded;
 }
-
-// export {
-//     millisecondsToHuman: millisecondsToHuman,
-//     newTimer: newTimer,
-//     findById: findById,
-//     renderElapsedString: renderElapsedString
-// };
